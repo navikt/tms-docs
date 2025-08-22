@@ -9,14 +9,7 @@ Min side er en dynamisk første-side for alle innloggede brukere. Målet er at i
 
 ## Slik fungerer det
 
-```mermaid
-graph LR
-    A[Utviklingsteam] -- Utvikle Microfrontend --> B[Microfrontend]
-    A -- Enable/Disable melding --> D[Kafka]
-    D --> E[tms-mikrofrontend-selector]
-    F[Min side] <-- Henter aktive microfronds gitt IDENT --> E
-    F <-- Henter microfrontend --> B
-```
+![Arkitektur tegning](../../../assets/arkitektur.png)
 
 Figuren ovenfor er en forenklet illusterasjon av hvordan microfrontend riggen henger sammen.
 
@@ -57,9 +50,9 @@ Start med [templaten for server-side-rendret microfrontends](https://github.com/
 }
 ```
 
-{% aside type="tip" %}
+:::tip
 Et meldingsbygger-bibliotek finnes på [Github packages](https://github.com/navikt/tms-mikrofrontend-selector/packages/1875650)
-{% /aside %}
+:::
 
 #### Hva er sensitivitet?
 
