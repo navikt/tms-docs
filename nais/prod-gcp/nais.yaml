@@ -1,0 +1,39 @@
+apiVersion: 'nais.io/v1alpha1'
+kind: 'Application'
+metadata:
+  name: tms-docs
+  namespace: min-side
+  labels:
+    team: min-side
+spec:
+  image: {{image}}
+  port: 3000
+  liveness:
+    path: /api/internal/isAlive
+    initialDelay: 10
+  readiness:
+    path: /api/internal/isReady
+    initialDelay: 10
+  replicas:
+    min: 2
+    max: 4
+  ingresses:
+    - 'https://tms-docs.ansatt.nav.no'
+  accessPolicy:
+    outbound:
+      rules:
+        - application: tms-astro-template
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true
+      tenant: nav.no
+    sidecar:
+      enabled: true
+      autoLogin: true
+  resources:
+    limits:
+      memory: 768Mi
+    requests:
+      cpu: '20m'
+      memory: 128Mi
