@@ -9,6 +9,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "TMS Docs",
+      prerender: false,
       social: [
         {
           icon: "slack",
