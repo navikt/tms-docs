@@ -18,6 +18,8 @@ export default defineConfig({
         },
       ],
       sidebar: [
+        { label: "Om Min side", slug: "about" },
+
         {
           label: "Microfrontends",
           items: [
@@ -31,10 +33,23 @@ export default defineConfig({
             },
           ],
         },
-        { label: "Varsler", slug: "varsler" },
+        { label: "Utkast", slug: "utkast" },
         {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
+          label: "Varsler",
+          items: [
+            {
+              label: "Komme i gang",
+              slug: "varsler/start",
+            },
+            {
+              label: "Konsumere",
+              slug: "varsler/konsumere",
+            },
+            {
+              label: "Migrere fra AVRO",
+              slug: "varsler/migrere",
+            },
+          ],
         },
       ],
     }),
