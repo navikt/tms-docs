@@ -9,7 +9,7 @@ Min side er en dynamisk første-side for alle innloggede brukere. Målet er at i
 
 ## Slik fungerer det
 
-![Arkitektur tegning](../../../../public/arkitektur.png)
+![Arkitektur tegning](/arkitektur.png)
 
 Figuren ovenfor er en forenklet illusterasjon av hvordan microfrontend riggen henger sammen.
 
