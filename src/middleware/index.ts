@@ -32,6 +32,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
     console.error(error);
     return context.redirect(`${loginUrl}${params}`);
   }
-
+  console.log("Token is valid");
   return next();
 });
