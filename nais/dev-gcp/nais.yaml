@@ -20,6 +20,10 @@ spec:
     max: 4
   ingresses:
     - 'https://tms-docs.ansatt.dev.nav.no'
+  accessPolicy:
+    outbound:
+      rules:
+        - "https://raw.githubusercontent.com/"
   azure:
     application:
       enabled: true

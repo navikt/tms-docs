@@ -22,7 +22,7 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: tms-astro-template
+        - "https://raw.githubusercontent.com/"
   azure:
     application:
       enabled: true
