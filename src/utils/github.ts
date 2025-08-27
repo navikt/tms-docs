@@ -7,8 +7,5 @@ export const fetchContent = async (repo: string, path: string) => {
     );
   }
   const text = await response.text();
-  console.log(
-    `Fetched content from ${url}: ${response.status} (len=${text.length})`
-  );
   return text;
 };
