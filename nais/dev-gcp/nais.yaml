@@ -20,6 +20,12 @@ spec:
     max: 4
   ingresses:
     - 'https://tms-docs.ansatt.dev.nav.no'
+  accessPolicy:
+    outbound:
+      external:
+        - host: raw.githubusercontent.com
+          ports:
+            - port: 443
   azure:
     application:
       enabled: true

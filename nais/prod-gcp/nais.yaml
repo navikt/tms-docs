@@ -21,8 +21,10 @@ spec:
     - 'https://tms-docs.ansatt.nav.no'
   accessPolicy:
     outbound:
-      rules:
-        - application: tms-astro-template
+      external:
+        - host: raw.githubusercontent.com
+          ports:
+            - port: 443
   azure:
     application:
       enabled: true
