@@ -23,16 +23,6 @@ spec:
     outbound:
       external:
         - host: raw.githubusercontent.com
-          ports:
-            - port: 443
-  azure:
-    application:
-      enabled: true
-      allowAllUsers: true
-      tenant: nav.no
-    sidecar:
-      enabled: true
-      autoLogin: true
   resources:
     limits:
       memory: 768Mi
