@@ -6,6 +6,6 @@ export const fetchContent = async (repo: string, path: string) => {
       `Failed to fetch content from ${url} (status ${response.status})`
     );
   }
-  const text = await response.text();
-  return text;
+  const readmeContent = await response.text();
+  return readmeContent;
 };

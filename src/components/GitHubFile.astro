@@ -3,12 +3,11 @@ import { fetchContent } from "../utils/github";
 import { marked } from "marked";
 
 interface Props {
-  repo: string; // e.g. "tms-mikrofrontend-selector" or "navikt/tms-mikrofrontend-selector"
-  path: string; // e.g. "main/howto.md"
-  preview?: number; // optional: show only first N chars
+  repo: string;
+  path: string;
 }
 
-const { repo, path, preview } = Astro.props as Props;
+const { repo, path } = Astro.props as Props;
 
 let content = "";
 try {
@@ -17,7 +16,6 @@ try {
   content = `Failed to load ${repo}/${path}: ${e}`;
 }
 
-const text = typeof preview === "number" ? content.slice(0, preview) : content;
-const renderedHtml = marked.parse(text);
+const renderedHtml = marked.parse(content);
 ---
 <div set:html={renderedHtml} />
