@@ -18,7 +18,7 @@ spec:
     min: 2
     max: 4
   ingresses:
-    - 'https://tms-docs..ansatt.dev.nav.no'
+    - 'https://tms-docs.ansatt.dev.nav.no'
   accessPolicy:
     outbound:
       external:
