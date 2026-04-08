@@ -1,0 +1,17 @@
+---
+import { getEntry, render } from "astro:content";
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props as Props;
+const entry = await getEntry("githubDocs", id);
+
+if (!entry) {
+  throw new Error(`Missing githubDocs entry: ${id}`);
+}
+
+const { Content } = await render(entry);
+---
+<Content />
