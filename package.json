@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/node": "9.4.3",
     "@astrojs/starlight": "0.35.2",
-    "@navikt/oasis": "3.8.0",
+    "@navikt/oasis": "4.1.4",
     "astro": "5.13.3",
     "marked": "16.2.0",
     "sharp": "0.34.3"
