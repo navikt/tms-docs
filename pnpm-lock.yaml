@@ -21,8 +21,8 @@ importers:
         specifier: 5.13.3
         version: 5.13.3(@types/node@24.3.0)(rollup@4.48.1)(typescript@5.9.2)
       marked:
-        specifier: 16.2.0
-        version: 16.2.0
+        specifier: 18.0.0
+        version: 18.0.0
       sharp:
         specifier: 0.34.3
         version: 0.34.3
@@ -1243,8 +1243,8 @@ packages:
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
-  marked@16.2.0:
-    resolution: {integrity: sha512-LbbTuye+0dWRz2TS9KJ7wsnD4KAtpj0MVkWc90XvBa6AslXsT0hTBVH5k32pcSyHH1fst9XEFJunXHktVy0zlg==}
+  marked@18.0.0:
+    resolution: {integrity: sha512-2e7Qiv/HJSXj8rDEpgTvGKsP8yYtI9xXHKDnrftrmnrJPaFNM7VRb2YCzWaX4BP1iCJ/XPduzDJZMFoqTCcIMA==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -3357,7 +3357,7 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
-  marked@16.2.0: {}
+  marked@18.0.0: {}
 
   mdast-util-definitions@6.0.0:
     dependencies:
