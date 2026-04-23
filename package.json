@@ -10,7 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "9.4.5",
+    "@astrojs/node": "10.0.5",
     "@astrojs/starlight": "0.35.2",
     "@navikt/oasis": "4.1.4",
     "astro": "5.13.3",
