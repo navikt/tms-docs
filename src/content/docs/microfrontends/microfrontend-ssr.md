@@ -1,3 +1,7 @@
+---
+title: Microfrontends
+---
+
 # Microfrontends på Min side
 
 ## Kom i gang
