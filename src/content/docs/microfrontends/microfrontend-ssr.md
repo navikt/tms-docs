@@ -1,23 +1,71 @@
----
-title: Microfrontend SSR
-description: Denne guiden tar for seg publiseringen av en server-side rendered (SSR) microfrontend på Min side.
----
-
-## Personalisering med microfrontends
-
-Min side er en dynamisk første-side for alle innloggede brukere. Målet er at innholdet på Min side skal representere brukerens nåværende forhold til Nav. For å oppnå dette, kan team legge inn microfrontends på Min side for å nå ut til sine brukere. En microfrontend kan sees på som en enkel applikasjon, som blir injektet inn på Min side. Microfrontends brukt på Min side kommer i form av små bokser med ulike funksjonalitet og innhold.
-
-## Slik fungerer det
-
-![Arkitektur tegning](/arkitektur.png)
-
-Figuren ovenfor er en forenklet illusterasjon av hvordan microfrontend riggen henger sammen.
+# Microfrontends på Min side
 
 ## Kom i gang
 
-Start med [templaten for server-side-rendret microfrontends](https://github.com/navikt/tms-microfrontend-template-ssr). Opprett et nytt repository basert på denne templaten, og følg instruksjonene i `README.md` for lokal kjøring, bygg og deploy.
+Ta utgangspunkt i [template for ssr microfrontend](https://github.com/navikt/tms-microfrontend-template-ssr) og opprett et nytt repository basert på denne templaten.
+
+### Konfigurer applikasjonen
+
+
+1. **Bytt ut applikasjonsnavn i konfigurasjonsfiler**
+   
+   CMD + Shift + F og søk etter tms-microfrontend-template-ssr og erstatt dette med ditt applikasjonsnavn.
+   
+2. **Tilpass nais.yaml**
+   
+   Tilpass både nais/dev-gcp/nais.yaml og nais/prod-gcp/nais.yaml. Alle felter som må tilpasses har tilhørende kommentar med instruksjon i template.
+
+
+3. **Tilpass innholdet i .github/workflows/deploy.yaml**
+
+   Tilpass deploy.yaml slik kommentarene i koden instruerer. Applikasjonsnavn skal være likt navn på repository.
+
+   Du kan vente med å kommentere inn og tilpasse stegene update-manifest-prod og deploy prod til applikasjonen er klar for prodsetting. 
+
+4. **Etterspør tilganger**
+   
+   Be om tilgang til å oppdatere manifest og deploye applikasjonen til nais på slack kanalen #minside-microfrontends
+
+5. **Deploy til produksjon**
+   
+   Når applikasjonen er klar for prodsetting, kan du kommentere inn update-manifest-prod og deploy-prod stegene i .github/workflows/deploy.yaml. Sørg for at de er fylt inn likt som i steg 3.
+
+
+## Bruk av template
+
+### Språk
+   
+   Bruk språkoppsett satt opp i template og legg språkvariablene inn i /language/text.ts
+
+
+### Fallback
+
+   Microfrontenden bør du tilby en fallback - se `src/pages/[locale]/fallback.astro`
+
+
+### CSS
+
+   For lokal css kan du bruke css moduler som vanlig. 
+
+   For bruk av designsystemet må medfølgende css isoleres til microfrontenden. Importer derfor kun de delene av ds-css som er i bruk. Aksel har laget [et verktøy for dette](https://aksel.nav.no/grunnleggende/kode/kommandolinje#56838966b1fc) som genererer listen med imports du trenger. Legg listen med imports i /styles/aksel.css.
+
+   CSS isolering er gjort via prefix av designsystemets klassenavn. For at dette skal fungere, må du beholde section taggen som wrapper hver page, hvor applikasjonsnavnet er brukt som klassenavn.
+
+
+### Client-side interaktivitet
+
+   Ved behov for client-side interaktivitet kan [Astros Client Islands](https://docs.astro.build/en/concepts/islands/#client-islands) tas i bruk.
+
+   Det krever også noe mer config. For å ikke overkomplisere template har vi valgt å fjerne dette som default, kontakt oss i [#minside-microfrontends](https://nav-it.slack.com/archives/C04V21LT27P) på Slack, så bistår vi med å sette opp dette.
+
+
+### Design
+
+   Vi stiller visse [designkrav](https://aksel.nav.no/god-praksis/artikler/retningslinjer-for-design-av-mikrofrontends) til utformingen av microfrontends, for å sikre en helhetlig brukeropplevelse.
+   
 
 ---
+
 
 ### Aktivere og deaktivere microfrontends
 
