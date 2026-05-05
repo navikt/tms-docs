@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import {defineConfig} from "astro/config";
 import starlight from "@astrojs/starlight";
 
 import node from "@astrojs/node";
@@ -18,7 +18,7 @@ export default defineConfig({
         },
       ],
       sidebar: [
-        { label: "Om Min side", slug: "about" },
+        {label: "Om Min side", slug: "about"},
 
         {
           label: "Microfrontends",
@@ -27,13 +27,9 @@ export default defineConfig({
               label: "Microfrontend SSR",
               slug: "microfrontends/microfrontend-ssr",
             },
-            {
-              label: "Microfrontend CSR",
-              slug: "microfrontends/microfrontend-csr",
-            },
           ],
         },
-        { label: "Utkast", slug: "utkast" },
+        {label: "Utkast", slug: "utkast"},
         {
           label: "Varsler",
           items: [
