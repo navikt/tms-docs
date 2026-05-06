@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@astrojs/node": "9.4.5",
-    "@astrojs/starlight": "0.35.2",
+    "@astrojs/starlight": "0.38.4",
     "@navikt/oasis": "4.1.4",
     "astro": "5.13.3",
-    "marked": "18.0.0",
-    "sharp": "0.34.3"
+    "marked": "18.0.2",
+    "sharp": "0.34.5"
   },
   "engines": {
     "node": ">=24.0.0"
