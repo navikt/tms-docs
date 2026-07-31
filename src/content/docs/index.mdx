@@ -1,13 +1,13 @@
 ---
-title: Min side Docs
+title: Min side docs
 description: Kom i gang med microfrontends, varsler og utkast på Min side.
 template: splash
 hero:
-  title: TMS Docs
+  title: Min side docs
   tagline: Kom i gang med microfrontends, varsler og utkast på Min side
   image:
-    html: |
-      <img src="/tms-logo.png" alt="Min side" style="max-width: 360px; width: 100%; height: auto;" />
+    alt: Min side-logo
+    file: ../../assets/tms-logo.png
   actions:
     - text: Om Min side
       link: /about/
@@ -18,20 +18,20 @@ import { LinkCard, CardGrid } from "@astrojs/starlight/components";
 
 ## Kom i gang
 
----
-
-<LinkCard
-  title="Microfrontends"
-  href="microfrontends/microfrontend-ssr"
-  description="Nå dine brukere med microfrontends"
-/>
-<LinkCard
-  title="Varsler"
-  href="varsler/start"
-  description="Send varseler til brukere"
-/>
-<LinkCard
-  title="Utkast"
-  href="utkast"
-  description="Gir brukeren mulighet til å fortsette utfyllingen av søknaden senere"
-/>
+<CardGrid>
+  <LinkCard
+    title="Microfrontends"
+    href="/microfrontends/microfrontend-ssr/"
+    description="Nå brukerne dine med microfrontends på Min side"
+  />
+  <LinkCard
+    title="Varsler"
+    href="/varsler/start/"
+    description="Send varsler til brukere"
+  />
+  <LinkCard
+    title="Utkast"
+    href="/utkast/"
+    description="La brukeren fortsette utfyllingen av en søknad senere"
+  />
+</CardGrid>
