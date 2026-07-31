@@ -13,12 +13,6 @@ updates:
       time: "08:00"
       timezone: "Europe/Oslo"
     open-pull-requests-limit: 10
-    ignore:
-      # @astrojs/node >=9.4.4 kaller app.getAllowedDomains(), som ikke finnes i
-      # astro 5.13.x. Det gir HTTP 500 på alle SSR-ruter (inkl. helsesjekkene) og
-      # bryter deploy. Fjern pinningen når vi oppgraderer astro/adapter sammen.
-      - dependency-name: "@astrojs/node"
-        versions: [">=9.4.4"]
     cooldown:
       default-days: 7
     groups:
