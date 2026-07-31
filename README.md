@@ -1,49 +1,57 @@
-# Starlight Starter Kit: Basics
+# tms-docs
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Dokumentasjonssiden til Team Min side: [tms-docs.nav.no](https://tms-docs.nav.no).
+Bygget med [Astro](https://astro.build) og [Starlight](https://starlight.astro.build).
 
-```
-npm create astro@latest -- --template starlight
-```
+## Arkitektur
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- Sidene i `src/content/docs/` skrives som vanlig Starlight-innhold (mdx).
+- Guidene for varsler og utkast hentes fra kilderepoene
+  (`tms-varsel-authority`, `tms-varsel-event-gateway`, `tms-utkast`) ved
+  byggetid, via en egen content-loader (`src/content/loaders/github-docs.ts`).
+  Hvilke dokumenter som hentes er definert i `src/github-docs.config.ts`.
+- Innholdet fryses ved bygg. En daglig cron-trigger i deploy-workflowen bygger
+  og deployer på nytt, så endringer i kilderepoene er ute innen ett døgn.
+  Feiler hentingen, feiler bygget – siten beholder forrige vellykkede deploy.
+- Alle dokumentasjonssider prerendres statisk; kun helsesjekk-endepunktene
+  kjører på serveren.
 
-## 🚀 Project Structure
+### Skrive kilde-dokumentasjon i andre repoer
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+Kildedokumentene er vanlig markdown. I tillegg støttes GitHubs alert-syntaks
+(`> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`, `> [!CAUTION]`), som rendres som
+native callouts både på GitHub og her. Relative lenker og bilder skrives om til
+absolutte URL-er mot kilderepoet.
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
-```
+> **Merk:** Styling av hentet innhold (asides, ankerlenker) avhenger av at
+> loaderen sender en virtuell filsti under `src/content/docs/` til
+> `renderMarkdown` (`fileURL`). Starlight prosesserer i utgangspunktet ikke
+> loader-rendret innhold – verifiser at asides fortsatt rendres ved oppgradering
+> av `@astrojs/starlight`.
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+## Lokal utvikling
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+| Kommando       | Hva den gjør                     |
+| :------------- | :------------------------------- |
+| `pnpm install` | Installerer avhengigheter        |
+| `pnpm dev`     | Dev-server på `localhost:4321`   |
+| `pnpm build`   | Produksjonsbygg til `./dist/`    |
+| `pnpm check`   | Typesjekk (`astro check`)        |
+| `pnpm test`    | Enhetstester (vitest)            |
 
-Static assets, like favicons, can be placed in the `public/` directory.
+Bygget validerer interne lenker med `starlight-links-validator` og feiler ved
+brutte lenker.
 
-## 🧞 Commands
+## Deploy
 
-All commands are run from the root of the project, from a terminal:
+Push til `main` bygger og deployer til dev og prod (nais). Push til
+`dev-*`-brancher deployer kun til dev. I tillegg bygger cron-triggeren daglig
+kl. 05:00 UTC.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm run dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm run build`           | Build your production site to `./dist/`          |
-| `pnpm run preview`         | Preview your build locally, before deploying     |
-| `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm run astro -- --help` | Get help using the Astro CLI                     |
+## Legge til en ny side
 
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+1. **Lokalt innhold:** legg en `.mdx`-fil i `src/content/docs/` og legg den til
+   i `sidebar` i `astro.config.mjs`.
+2. **Innhold fra et annet repo:** legg dokumentet til i
+   `src/github-docs.config.ts`, opprett en tynn wrapper-side som bruker
+   `<GitHubDoc id="..." />`, og legg ruten til i `sidebar`.
