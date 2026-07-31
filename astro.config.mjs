@@ -10,6 +10,7 @@ export default defineConfig({
     starlight({
       title: "TMS Docs",
       prerender: false,
+      routeMiddleware: "./src/routeData.ts",
       social: [
         {
           icon: "slack",
