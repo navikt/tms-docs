@@ -1,88 +1,68 @@
 import type { Loader } from "astro/loaders";
+import {
+  sourceBlobBase,
+  sourceRawBase,
+  sourceRawUrl,
+  type GitHubDocSource,
+} from "../../github-docs.config";
+import {
+  absolutizeUrls,
+  githubAlertsToDirectives,
+  stripLeadingH1,
+} from "./markdown-transforms";
 
-interface GitHubDocConfig {
-  id: string;
-  title: string;
-  repo: string;
-  path: string;
-}
-
-const GITHUB_DOCS: GitHubDocConfig[] = [
-  {
-    id: "utkast-howto",
-    title: "Utkast",
-    repo: "tms-utkast",
-    path: "main/howto.md",
-  },
-  {
-    id: "varsler-start-howto",
-    title: "Komme i gang",
-    repo: "tms-varsel-authority",
-    path: "main/howto.md",
-  },
-  {
-    id: "varsler-konsumere-howto",
-    title: "Varsel status",
-    repo: "tms-varsel-event-gateway",
-    path: "main/howto.md",
-  },
-  {
-    id: "varsler-migrere",
-    title: "Migrere fra AVRO",
-    repo: "tms-varsel-authority",
-    path: "main/migrering.md",
-  },
-  {
-    id: "microfrontend-csr-howto",
-    title: "Microfrontend CSR",
-    repo: "tms-mikrofrontend-selector",
-    path: "main/howto.md",
-  },
-];
-
-export function githubDocsLoader(): Loader {
+export function githubDocsLoader({ docs }: { docs: GitHubDocSource[] }) {
   return {
     name: "github-docs-loader",
     async load(context) {
-      context.store.clear();
-
-      for (const doc of GITHUB_DOCS) {
-        const sourceUrl = `https://raw.githubusercontent.com/navikt/${doc.repo}/${doc.path}`;
-
-        let body = "";
-        try {
+      // Feiler bygget ved fetch-feil: siten beholder forrige vellykkede deploy
+      // i stedet for å publisere sider uten innhold.
+      const entries = await Promise.all(
+        docs.map(async (doc) => {
+          const sourceUrl = sourceRawUrl(doc);
           const response = await fetch(sourceUrl);
           if (!response.ok) {
-            throw new Error(`status ${response.status}`);
+            throw new Error(
+              `github-docs-loader: ${sourceUrl} svarte ${response.status}`,
+            );
           }
-          body = await response.text();
-        } catch (error) {
-          context.logger.error(
-            `Failed to fetch ${sourceUrl}: ${error instanceof Error ? error.message : String(error)}`,
+          const raw = await response.text();
+          // Kildedokumentets h1 erstattes av sidetittelen; GitHub-alerts blir
+          // Starlight-asides; relative lenker/bilder pekes mot kilderepoet.
+          const body = absolutizeUrls(
+            githubAlertsToDirectives(stripLeadingH1(raw)),
+            { blobBase: sourceBlobBase(doc), rawBase: sourceRawBase(doc) },
           );
-          body = `# ${doc.title}\n\nFailed to fetch content from ${sourceUrl}.`;
-        }
+          // Virtuell filsti under docs-collectionen gir Starlight sine
+          // remark/rehype-plugins (asides, ankerlenker) et gyldig filpath,
+          // slik at hentet innhold behandles som lokalt innhold. Se README.
+          const rendered = await context.renderMarkdown(body, {
+            fileURL: new URL(
+              `src/content/docs/github/${doc.id}.md`,
+              context.config.root,
+            ),
+          });
+          return { doc, body, rendered };
+        }),
+      );
 
-        const rendered = await context.renderMarkdown(body);
+      context.store.clear();
+      for (const { doc, body, rendered } of entries) {
+        const filePath = `github/${doc.repo}/${doc.file}`;
         const data = await context.parseData({
           id: doc.id,
-          data: {
-            title: doc.title,
-            repo: doc.repo,
-            path: doc.path,
-          },
-          filePath: `github/${doc.repo}/${doc.path}`,
+          data: { title: doc.title, repo: doc.repo, file: doc.file },
+          filePath,
         });
-
         context.store.set({
           id: doc.id,
           data,
           body,
           rendered,
-          filePath: `github/${doc.repo}/${doc.path}`,
+          filePath,
           digest: context.generateDigest(body),
         });
       }
     },
-  };
+  } satisfies Loader;
 }

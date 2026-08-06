@@ -1,144 +1,176 @@
 ---
-title: Microfrontends
+title: Microfrontend SSR
+description: Kom i gang med server-side-rendrede microfrontends på Min side.
 ---
 
-# Microfrontends på Min side
+import { Steps, Tabs, TabItem } from "@astrojs/starlight/components";
+
+Ta utgangspunkt i [templaten for SSR-microfrontends](https://github.com/navikt/tms-microfrontend-template-ssr)
+og opprett et nytt repository basert på den.
 
 ## Kom i gang
 
-Ta utgangspunkt i [template for ssr microfrontend](https://github.com/navikt/tms-microfrontend-template-ssr) og opprett et nytt repository basert på denne templaten.
-
-### Konfigurer applikasjonen
-
+<Steps>
 
 1. **Bytt ut applikasjonsnavn i konfigurasjonsfiler**
-   
-   CMD + Shift + F og søk etter tms-microfrontend-template-ssr og erstatt dette med ditt applikasjonsnavn.
-   
+
+   `CMD + Shift + F`, søk etter `tms-microfrontend-template-ssr` og erstatt med
+   ditt applikasjonsnavn.
+
 2. **Tilpass nais.yaml**
-   
-   Tilpass både nais/dev-gcp/nais.yaml og nais/prod-gcp/nais.yaml. Alle felter som må tilpasses har tilhørende kommentar med instruksjon i template.
 
+   Tilpass både `nais/dev-gcp/nais.yaml` og `nais/prod-gcp/nais.yaml`. Alle
+   felter som må tilpasses har tilhørende kommentar med instruksjon i templaten.
 
-3. **Tilpass innholdet i .github/workflows/deploy.yaml**
+3. **Tilpass .github/workflows/deploy.yaml**
 
-   Tilpass deploy.yaml slik kommentarene i koden instruerer. Applikasjonsnavn skal være likt navn på repository.
+   Tilpass `deploy.yaml` slik kommentarene i koden instruerer. Applikasjonsnavnet
+   skal være likt navnet på repositoryet.
 
-   Du kan vente med å kommentere inn og tilpasse stegene update-manifest-prod og deploy prod til applikasjonen er klar for prodsetting. 
+   Du kan vente med å kommentere inn og tilpasse stegene `update-manifest-prod`
+   og `deploy-prod` til applikasjonen er klar for prodsetting.
 
 4. **Etterspør tilganger**
-   
-   Be om tilgang til å oppdatere manifest og deploye applikasjonen til nais på slack kanalen #minside-microfrontends
+
+   Be om tilgang til å oppdatere manifest og deploye applikasjonen til nais i
+   Slack-kanalen [#minside-microfrontends](https://nav-it.slack.com/archives/C04V21LT27P).
 
 5. **Deploy til produksjon**
-   
-   Når applikasjonen er klar for prodsetting, kan du kommentere inn update-manifest-prod og deploy-prod stegene i .github/workflows/deploy.yaml. Sørg for at de er fylt inn likt som i steg 3.
 
+   Når applikasjonen er klar for prodsetting, kommenter inn
+   `update-manifest-prod`- og `deploy-prod`-stegene i
+   `.github/workflows/deploy.yaml`. Sørg for at de er fylt inn likt som i steg 3.
 
-## Bruk av template
+</Steps>
+
+## Bruk av templaten
 
 ### Språk
-   
-   Bruk språkoppsett satt opp i template og legg språkvariablene inn i /language/text.ts
 
+Bruk språkoppsettet i templaten og legg språkvariablene inn i `/language/text.ts`.
 
 ### Fallback
 
-   Microfrontenden bør du tilby en fallback - se `src/pages/[locale]/fallback.astro`
-
+Microfrontenden bør tilby en fallback dersom den har eksterne kall – se
+`src/pages/[locale]/fallback.astro`.
 
 ### CSS
 
-   For lokal css kan du bruke css moduler som vanlig. 
+For lokal CSS kan du bruke CSS-moduler som vanlig.
 
-   For bruk av designsystemet må medfølgende css isoleres til microfrontenden. Importer derfor kun de delene av ds-css som er i bruk. Aksel har laget [et verktøy for dette](https://aksel.nav.no/grunnleggende/kode/kommandolinje#56838966b1fc) som genererer listen med imports du trenger. Legg listen med imports i /styles/aksel.css.
+For designsystemet må medfølgende CSS isoleres til microfrontenden. Importer
+derfor kun de delene av ds-css som er i bruk. Aksel har laget
+[et verktøy for dette](https://aksel.nav.no/grunnleggende/kode/kommandolinje#56838966b1fc)
+som genererer listen med imports du trenger. Legg listen i `/styles/aksel.css`.
 
-   CSS isolering er gjort via prefix av designsystemets klassenavn. For at dette skal fungere, må du beholde section taggen som wrapper hver page, hvor applikasjonsnavnet er brukt som klassenavn.
+CSS-isoleringen gjøres via prefiks av designsystemets klassenavn. For at dette
+skal fungere må du beholde `section`-taggen som wrapper hver side, med
+applikasjonsnavnet som klassenavn.
 
+### Client-side-interaktivitet
 
-### Client-side interaktivitet
+Ved behov for client-side-interaktivitet kan
+[Astros Client Islands](https://docs.astro.build/en/concepts/islands/#client-islands)
+tas i bruk.
 
-   Ved behov for client-side interaktivitet kan [Astros Client Islands](https://docs.astro.build/en/concepts/islands/#client-islands) tas i bruk.
+Det krever noe mer config. For å ikke overkomplisere templaten er dette fjernet
+som default – kontakt oss i
+[#minside-microfrontends](https://nav-it.slack.com/archives/C04V21LT27P), så
+bistår vi med oppsettet.
 
-   Det krever også noe mer config. For å ikke overkomplisere template har vi valgt å fjerne dette som default, kontakt oss i [#minside-microfrontends](https://nav-it.slack.com/archives/C04V21LT27P) på Slack, så bistår vi med å sette opp dette.
+## Aktivere og deaktivere microfrontends
 
+![Flyt for aktivering av microfrontends: utviklingsteamet utvikler en microfrontend og sender enable/disable-meldinger via Kafka til tms-mikrofrontend-selector, som forteller Min side hvilke microfrontends som er aktive for brukeren](/arkitektur.png)
 
-### Design
+<Steps>
 
-   Vi stiller visse [designkrav](https://aksel.nav.no/god-praksis/artikler/retningslinjer-for-design-av-mikrofrontends) til utformingen av microfrontends, for å sikre en helhetlig brukeropplevelse.
-   
+1. **Koble til Kafka-topicet**
 
----
+   Abonner på [min-side-microfrontend-topicet](https://github.com/navikt/min-side-microfrontend-topic-iac).
 
+2. **Send meldinger**
 
-### Aktivere og deaktivere microfrontends
+   Send enable/disable-meldinger via Kafka for å aktivere eller deaktivere
+   microfrontenden for spesifikke brukere.
 
-1. **Koble til kafka topicet**
-   Abonner på [min-side-microfrontend-topicet](https://github.com/navikt/min-side-microfrontend-topic-iac). **NOTE:** `microfrontendId` skal være identisk med navnet på Github-repoet du opprettet basert på templatet tidligere i guiden.
+</Steps>
 
-1. **Send meldinger**
-   Du kan nå sende oss Enable/Disable meldinger via Kafka for å skru aktivere/deaktivere microfrontenden for spesifikke brukere.
-
-#### Meldingsformat
-
-```json
-// Enable
-{
-    "@action": "enable",
-    "ident": <ident for bruker: fnr/dnr>,
-    "microfrontend_id": <microfrontendId>,
-    "sensitivitet": <nivå som kreves for å se innholdet i mikrofrontenden, gyldige verdier: substantial og high>,
-    "@initiated_by": <ditt-team>
-}
-```
-
-```json
-// Disable
-{
-    "@action":  "disable",
-    "ident": <ident for bruker: fnr/dnr>,
-    "microfrontend_id": <microfrontendId>,
-    "@initiated_by":<ditt-team>
-}
-```
-
-:::tip
-Et meldingsbygger-bibliotek finnes på [Github packages](https://github.com/navikt/tms-mikrofrontend-selector/packages/1875650)
+:::caution[Viktig]
+`microfrontend_id` skal være identisk med navnet på GitHub-repoet du opprettet
+basert på templaten.
 :::
 
-#### Hva er sensitivitet?
+### Meldingsformat
 
-`sensitivitet` samsvarer med [ID-portens ACR-verdier](https://docs.digdir.no/docs/idporten/oidc/oidc_protocol_id_token#acr-values).
+<Tabs>
+  <TabItem label="Enable">
+    ```json
+    {
+        "@action": "enable",
+        "ident": <ident for bruker: fnr/dnr>,
+        "microfrontend_id": <microfrontendId>,
+        "sensitivitet": <nivå som kreves for å se innholdet, gyldige verdier: substantial og high>,
+        "@initiated_by": <ditt-team>
+    }
+    ```
+  </TabItem>
+  <TabItem label="Disable">
+    ```json
+    {
+        "@action": "disable",
+        "ident": <ident for bruker: fnr/dnr>,
+        "microfrontend_id": <microfrontendId>,
+        "@initiated_by": <ditt-team>
+    }
+    ```
+  </TabItem>
+</Tabs>
 
-|     Verdi     | Når brukes den?                                  |
-| :-----------: | :----------------------------------------------- |
-|    `high`     | Innhold krever innlogging med idporten-loa-high. |
-| `substantial` | Innhold kan vises uavhengig av innloggingsnivå.  |
+:::tip
+Et meldingsbygger-bibliotek finnes på
+[GitHub Packages](https://github.com/navikt/tms-mikrofrontend-selector/packages/1875650).
+:::
 
-Hvis feltet utelates, antar systemet `high`. Logger brukeren inn med `idporten-loa-substantial` og det finnes microfrontends som krever `idporten-loa-high`, får brukeren tilbud om «step-up»-innlogging. Se også [NAIS-dokumentasjonen om security levels](https://docs.nais.io/security/auth/idporten/#security-levels).
+### Hva er sensitivitet?
 
-## Rettningslinjer
+`sensitivitet` samsvarer med
+[ID-portens ACR-verdier](https://docs.digdir.no/docs/idporten/oidc/oidc_protocol_id_token#acr-values).
 
-For å sikre en helhetlig brukeropplevelse på tvers av ulike type innhold på Min side, stiller vi visse krav til både innhold i- og utforming av microfrontends. Tabellen under viser en oversikt over disse rettningslinjene.
+|     Verdi     | Når brukes den?                                    |
+| :-----------: | :------------------------------------------------- |
+|    `high`     | Innhold krever innlogging med `idporten-loa-high`. |
+| `substantial` | Innhold kan vises uavhengig av innloggingsnivå.    |
 
-|     Tema     | Krav og resurser                                                                                                                                                                                   |
-| :----------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    Språk     | Alt innhold skal finnes på bokmål, nynorsk og engelsk. Språkhåndtering er allerede rigget i templaten – se `src/language/text.ts`.                                                                 |
-|    Design    | Vi stiller visse [designkrav](https://aksel.nav.no/god-praksis/artikler/retningslinjer-for-design-av-mikrofrontends) til utformingen av microfrontends, for å sikre en helhetlig brukeropplevelse. |
-| Dependencies | Dersom du benytter deg av client-side React komponenter bør du være på samme Major versjon som [tms- min-side](https://github.com/navikt/tms-min-side).                                            |
-|  Analytics   | Vi bruker dekoratøren sin analyticsfunksjon - se `src/pages/[locale]/index.astro`.                                                                                                                 |
-|   Fallback   | Dersom microfrontenden har eksterne kall bør du tilby en fallback - se `src/pages/[locale]/fallback.astro`                                                                                         |
+Hvis feltet utelates, antar systemet `high`. Logger brukeren inn med
+`idporten-loa-substantial` og det finnes microfrontends som krever
+`idporten-loa-high`, får brukeren tilbud om «step-up»-innlogging. Se også
+[NAIS-dokumentasjonen om security levels](https://docs.nais.io/security/auth/idporten/#security-levels).
+
+## Retningslinjer
+
+For å sikre en helhetlig brukeropplevelse på tvers av ulike typer innhold på
+Min side, stiller vi visse krav til både innholdet i og utformingen av
+microfrontends.
+
+|     Tema     | Krav og ressurser                                                                                                                                                       |
+| :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    Språk     | Alt innhold skal finnes på bokmål, nynorsk og engelsk. Språkhåndtering er allerede rigget i templaten – se `src/language/text.ts`.                                       |
+|    Design    | Vi stiller visse [designkrav](https://aksel.nav.no/god-praksis/artikler/retningslinjer-for-design-av-mikrofrontends) til utformingen, for en helhetlig brukeropplevelse. |
+| Dependencies | Bruker du client-side React-komponenter bør du være på samme major-versjon som [tms-min-side](https://github.com/navikt/tms-min-side).                                   |
+|  Analytics   | Vi bruker dekoratørens analytics-funksjon – se `src/pages/[locale]/index.astro`.                                                                                         |
+|   Fallback   | Har microfrontenden eksterne kall bør du tilby en fallback – se `src/pages/[locale]/fallback.astro`.                                                                     |
 
 ## Plassering på Min side
 
 Min side består av tre soner der team kan plassere innhold:
 
-|         Seksjon         | Formål                                                                                                                                                                                                                                                                                                 | Teknisk støtte          |
-| :---------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------- |
-|      Din oversikt       | Personlig status og løpende saker relatert til brukerens nåværende forhold til Nav.                                                                                                                                                                                                                    | `kafka`                 |
-|       Produktkort       | Produktkort er strengt talt ikke microfrontender, men regelbaserte lenker som peker til innloggede produktsider for ett område. Vi anbefaler heller å bruke kafka, siden dette er mer treffsikkert i forhold til brukers situasjon, men hvis kafka ikke er en mulighet kan dette være ett alternativ.  | `Kafka` & `Regelbasert` |
-| Kanskje aktuelt for deg | Under kanskje aktuelt for deg skal bruker få forslag til annet innhold som kan være relevant for hen, for eksempel andre stønader eller støttetjenester en bruker kan ha rett på gitt at hen har en spesifikk ytelse. Foreløbig er det kun regelbaserte mikrofrontender som vises i den her seksjonen. | `Kafka` & `Regelbasert` |
+|         Seksjon         | Formål                                                                                                                                                                                                                                                        | Teknisk støtte          |
+| :---------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------- |
+|      Din oversikt       | Personlig status og løpende saker relatert til brukerens nåværende forhold til Nav.                                                                                                                                                                           | `Kafka`                 |
+|       Produktkort       | Produktkort er strengt tatt ikke microfrontends, men regelbaserte lenker som peker til innloggede produktsider for et område. Vi anbefaler heller Kafka, siden det er mer treffsikkert for brukerens situasjon, men produktkort kan være et alternativ når Kafka ikke er mulig. | `Kafka` & `Regelbasert` |
+| Kanskje aktuelt for deg | Her får brukeren forslag til annet relevant innhold, for eksempel andre stønader eller støttetjenester brukeren kan ha rett på. Foreløpig vises kun regelbaserte microfrontends i denne seksjonen.                                                             | `Kafka` & `Regelbasert` |
 
-## Lurer du på noe?
-
-Dersom du har spørsmål, kan disse stilles i [#minside-microfrontends](https://nav-it.slack.com/archives/C04V21LT27P) kanalen på slack.
+:::note[Lurer du på noe?]
+Still spørsmål i [#minside-microfrontends](https://nav-it.slack.com/archives/C04V21LT27P)
+på Slack.
+:::

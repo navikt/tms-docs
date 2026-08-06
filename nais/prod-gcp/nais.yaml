@@ -19,10 +19,6 @@ spec:
     max: 4
   ingresses:
     - 'https://tms-docs.nav.no'
-  accessPolicy:
-    outbound:
-      external:
-        - host: raw.githubusercontent.com
   resources:
     limits:
       memory: 768Mi
