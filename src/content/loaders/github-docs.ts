@@ -10,6 +10,7 @@ import {
   githubAlertsToDirectives,
   stripLeadingH1,
 } from "./markdown-transforms";
+import { countStepsLists, stepsInSections } from "./html-transforms";
 
 export function githubDocsLoader({ docs }: { docs: GitHubDocSource[] }) {
   return {
@@ -42,6 +43,18 @@ export function githubDocsLoader({ docs }: { docs: GitHubDocSource[] }) {
               context.config.root,
             ),
           });
+          if (doc.steps?.length) {
+            rendered.html = stepsInSections(rendered.html, doc.steps);
+            const marked = countStepsLists(rendered.html);
+            if (marked < doc.steps.length) {
+              // Bare visningen blir dårligere, så vi advarer i stedet for å
+              // felle bygget: kilderepoene skal kunne endre overskrifter uten
+              // at siten blir stående med gammelt innhold.
+              context.logger.warn(
+                `${doc.id}: fant ${marked} av ${doc.steps.length} steg-lister (sjekk 'steps' i github-docs.config.ts)`,
+              );
+            }
+          }
           return { doc, body, rendered };
         }),
       );

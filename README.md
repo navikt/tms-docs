@@ -23,6 +23,21 @@ Kildedokumentene er vanlig markdown. I tillegg støttes GitHubs alert-syntaks
 native callouts både på GitHub og her. Relative lenker og bilder skrives om til
 absolutte URL-er mot kilderepoet.
 
+En nummerert liste kan vises som steg, slik `<Steps>` gjør på de lokale sidene.
+Det slås på her, ikke i kilderepoet: legg overskriftens slug – eller `"_top"`
+for innhold før første `h2` – i `steps` på dokumentet i
+`src/github-docs.config.ts`. Kildefila forblir vanlig markdown, så GitHub og
+[tms-dokumentasjon](https://navikt.github.io/tms-dokumentasjon), som henter de
+samme filene, er uberørt. Finner ikke loaderen lista, logger den en advarsel og
+bygger videre. Bruk det sparsomt – bare på lister leseren faktisk skal utføre i
+rekkefølge.
+
+> **Merk:** dev-serveren gjenbruker lagret innhold og kjører ikke loaderen på
+> nytt når du endrer `steps`. Stopp serveren, slett
+> `node_modules/.astro/data-store.json` og start på nytt – eller kjør
+> `pnpm build` – for å se endringen. Cron-bygget starter alltid tomt, så dette
+> gjelder bare lokalt.
+
 > **Merk:** Styling av hentet innhold (asides, ankerlenker) avhenger av at
 > loaderen sender en virtuell filsti under `src/content/docs/` til
 > `renderMarkdown` (`fileURL`). Starlight prosesserer i utgangspunktet ikke
