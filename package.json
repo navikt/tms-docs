@@ -12,17 +12,17 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "11.1.5",
-    "@astrojs/starlight": "0.41.5",
-    "astro": "7.3.1",
+    "@astrojs/node": "11.1.14",
+    "@astrojs/starlight": "0.43.1",
+    "astro": "7.4.13",
     "sharp": "0.35.5"
   },
   "engines": {
     "node": ">=24.0.0"
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
-    "starlight-links-validator": "0.25.2",
+    "@astrojs/check": "0.9.12",
+    "starlight-links-validator": "0.27.0",
     "typescript": "6.0.3",
     "vitest": "4.1.11"
   }
