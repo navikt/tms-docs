@@ -8,6 +8,12 @@ export interface GitHubDocSource {
   file: string;
   /** Rute på tms-docs, uten skråstrek foran/bak */
   slug: string;
+  /**
+   * Seksjoner der den første nummererte lista skal vises som steg, slik
+   * `<Steps>` gjør på de lokale sidene. Oppgi overskriftens slug, eller
+   * `"_top"` for innhold før første h2. Kildefila er uendret markdown.
+   */
+  steps?: string[];
 }
 
 export const GITHUB_DOCS: GitHubDocSource[] = [
@@ -24,6 +30,7 @@ export const GITHUB_DOCS: GitHubDocSource[] = [
     repo: "tms-varsel-authority",
     file: "howto.md",
     slug: "varsler/start",
+    steps: ["oppsett"],
   },
   {
     id: "varsler-konsumere-howto",
